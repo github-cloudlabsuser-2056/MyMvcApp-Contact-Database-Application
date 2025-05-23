@@ -1,0 +1,45 @@
+@model IEnumerable<MyMvcApp.Models.User>
+
+@{
+    ViewBag.Title = "Resultados de Búsqueda";
+}
+
+<h2>Resultados de Búsqueda</h2>
+
+<form asp-action="Search" method="get" class="form-inline" style="margin-bottom:20px;">
+    <input type="text" name="query" class="form-control" placeholder="Buscar usuario..." value="@(Context.Request.Query.ContainsKey("query") ? Context.Request.Query["query"].ToString() : "")" style="width:250px; display:inline-block; margin-right:10px;" />
+    <button type="submit" class="btn btn-primary">Buscar</button>
+    <a asp-action="Index" class="btn btn-secondary" style="margin-left:10px;">Limpiar</a>
+</form>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No se encontraron usuarios con ese criterio.</div>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model) {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Email</td>
+                <td>@item.Phone</td>
+                <td>
+                    @Html.ActionLink("Editar", "Edit", new { id=item.Id }, new { @class = "btn btn-sm btn-warning" })
+                    @Html.ActionLink("Detalles", "Details", new { id=item.Id }, new { @class = "btn btn-sm btn-info" })
+                    @Html.ActionLink("Eliminar", "Delete", new { id=item.Id }, new { @class = "btn btn-sm btn-danger" })
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
